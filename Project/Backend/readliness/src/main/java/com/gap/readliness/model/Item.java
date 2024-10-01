@@ -1,6 +1,7 @@
 package com.gap.readliness.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class Item implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "items_id")
+    @NotNull
     private Long ItemsId;
 
     @Column(name = "items_name")
@@ -28,12 +30,15 @@ public class Item implements Serializable {
     @Column(name = "items_code")
     private String itemsCode;
 
+    @NotNull
     @Column(name = "stock")
     private Integer stock;
 
+    @NotNull
     @Column(name = "price")
     private Long price;
 
+    @NotNull
     @Column(name = "is_available")
     private Integer isAvailable;
 
