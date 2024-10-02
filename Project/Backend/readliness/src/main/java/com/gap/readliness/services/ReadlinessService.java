@@ -75,7 +75,12 @@ public class ReadlinessService {
             throw new Exception("Stok tidak mencukupi");
         }
 
-        item.setStock(item.getStock() - quantity);
+        var stockItem = item.getStock() - quantity;
+        if (item.getStock() <= 0) {
+            item.setIsAvailable(0);
+        }
+
+        item.setStock(stockItem);
         itemRepository.save(item);
         return item;
     }

@@ -44,7 +44,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                    @Param("itemsId") Long itemsId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT b FROM Item b WHERE b.itemsId = :itemsId AND b.stock > 0")
+    @Query("SELECT b FROM Item b WHERE b.itemsId = :itemsId AND b.stock > 0 AND b.isAvailable = 1")
     Optional<Item> findByIdWithLock(@Param("itemsId") Long itemsId);
 
     @Query("SELECT MAX(i.itemsCode) FROM Item i")
