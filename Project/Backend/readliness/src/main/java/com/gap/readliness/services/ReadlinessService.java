@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.gap.readliness.util.Pagination.setPagination;
@@ -43,6 +44,9 @@ public class ReadlinessService {
     public void saveCustomer(Customer customerReq) {
         log.info("Start save customer");
         try {
+            Date currentDate = new Date();
+            customerReq.setCustomerCode(generateUtil.generateUniqueCode(currentDate));
+
             customerRepository.save(customerReq);
         } catch (Exception e) {
             log.error("Error save", e);
@@ -223,6 +227,31 @@ public class ReadlinessService {
     public void deleteCustomer(Long id) {
         log.info("Start deleting customer");
         try {
+            Integer rowsUpdateItem = null;
+            Order dataOrder = orderRepository.findByCustomerId(id);
+
+            if (dataOrder != null) {
+                Item dataItem = itemRepository.findByItemsId(dataOrder.getItemsId());
+                var stockCustomer = dataOrder.getQuantity();
+
+                rowsUpdateItem = itemRepository.updateItem(
+                        dataItem.getItemsName(),
+                        dataItem.getItemsCode(),
+                        dataItem.getStock() + stockCustomer,
+                        dataItem.getPrice(),
+                        1,
+                        dataItem.getLastReStock(),
+                        dataItem.getItemsId()
+                );
+
+                if (rowsUpdateItem == 0) {
+                    log.warn("No item found with ID: " + dataItem.getItemsId());
+                    throw new RuntimeException("Item not found");
+                }
+            }
+
+
+
             int rowsDeleted = customerRepository.deleteByCustomerId(id);
             if (rowsDeleted == 0) {
                 log.warn("No customer found with ID: " + id);

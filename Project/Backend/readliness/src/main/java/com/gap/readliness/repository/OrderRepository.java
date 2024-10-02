@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -25,6 +26,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<OrderResponsePage> getOrder(Pageable pageable);
 
     Order findByOrderId(@Param("orderId") Long orderId);
+    
+    Order findByCustomerId(@Param("customerId") Long customerId);
 
     @Modifying
     @Transactional
