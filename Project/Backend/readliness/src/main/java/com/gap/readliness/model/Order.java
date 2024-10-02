@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -24,19 +25,21 @@ public class Order implements Serializable {
     @NotNull
     private Long orderId;
 
+    @NotNull
     @Column(name = "order_code")
-    private Long orderCode;
+    private String orderCode;
 
+    @NotNull
     @Column(name = "order_date")
     private Date orderDate;
 
     @NotNull
     @Column(name = "total_price")
-    private Long totalPrice;
+    private BigDecimal totalPrice;
 
     @NotNull
     @Column(name = "quantity")
-    private Long quantity;
+    private Integer quantity;
 
     @NotNull
     @Column(name = "customer_id")

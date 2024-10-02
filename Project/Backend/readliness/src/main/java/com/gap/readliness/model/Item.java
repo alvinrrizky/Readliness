@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -22,11 +23,12 @@ public class Item implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "items_id")
     @NotNull
-    private Long ItemsId;
+    private Long itemsId;
 
     @Column(name = "items_name")
     private String itemsName;
 
+    @NotNull
     @Column(name = "items_code")
     private String itemsCode;
 
@@ -36,7 +38,7 @@ public class Item implements Serializable {
 
     @NotNull
     @Column(name = "price")
-    private Long price;
+    private BigDecimal price;
 
     @NotNull
     @Column(name = "is_available")
