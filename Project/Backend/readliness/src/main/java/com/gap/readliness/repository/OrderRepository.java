@@ -1,7 +1,6 @@
 package com.gap.readliness.repository;
 
 import com.gap.readliness.dto.OrderResponsePage;
-import com.gap.readliness.model.Item;
 import com.gap.readliness.model.Order;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {

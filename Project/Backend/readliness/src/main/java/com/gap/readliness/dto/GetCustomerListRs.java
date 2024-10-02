@@ -1,6 +1,5 @@
 package com.gap.readliness.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gap.readliness.model.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
