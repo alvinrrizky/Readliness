@@ -345,6 +345,7 @@ public class ReadlinessService {
 
     public GetCustomerListRs getCustomerList(ListRq req) {
         log.info("Start get List customer");
+        log.info(String.valueOf(req));
         try {
             if (req.getPage() == null || req.getPage() == 0) {
                 throw new IllegalArgumentException("Page number cannot be null or 0");
