@@ -1,0 +1,45 @@
+@media screen and (max-width: 767px) {
+  .table-responsive {
+    .table {
+      display: block;
+      thead {
+        display: block;
+        tr {
+          position: absolute;
+          top: -9999px;
+          left: -9999px;
+        }
+      }
+      tbody {
+        display: block;
+      }
+      th {
+        display: block;
+      }
+      td {
+        display: block;
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+        &:before {
+          content: attr(data-label);
+          position: absolute;
+          left: 6px;
+          width: 45%;
+          padding-right: 10px;
+          white-space: nowrap;
+          font-weight: bold;
+        }
+        &:last-child {
+          text-align: center;
+        }
+      }
+      tr {
+        display: block;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
