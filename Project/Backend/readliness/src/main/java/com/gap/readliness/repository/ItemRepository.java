@@ -35,7 +35,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Modifying
     @Transactional
     @Query(value = "UPDATE items SET items_name = :itemsName, items_code = :itemsCode, stock = :stock, price = :price, is_available = :isAvailable, last_re_stock = :lastReStock WHERE items_id = :itemsId", nativeQuery = true)
-    int updateItem(@Param("itemsName") String itemsName,
+    void updateItem(@Param("itemsName") String itemsName,
                    @Param("itemsCode") String itemsCode,
                    @Param("stock") Integer stock,
                    @Param("price") BigDecimal price,

@@ -17,17 +17,20 @@ public class PdfController {
     @Autowired
     private PdfService pdfService;
 
-    @GetMapping("/download-pdf")
+    @GetMapping("/downloadpdf")
     public ResponseEntity<byte[]> downloadPdf() throws JRException, IOException {
 
-        // Panggil service untuk generate PDF
+        // Call service to generate PDF
         byte[] pdfBytes = pdfService.generatePdf();
 
-        // Set response header untuk mendownload file
+        // Set response header to download file
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("attachment", "orders_report.pdf");
+        headers.setContentLength(pdfBytes.length); // Specify the content length
 
-        return ResponseEntity.ok().headers(headers).body(pdfBytes);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 }

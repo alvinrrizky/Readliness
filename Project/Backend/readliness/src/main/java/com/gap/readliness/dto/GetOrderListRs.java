@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetOrderListRs implements Serializable {
 
-    private List<Order> orderList;
+    private List<OrderList> orderList;
     private Integer pageCurrent;
     private Long totalPages;
     private Long totalElements;

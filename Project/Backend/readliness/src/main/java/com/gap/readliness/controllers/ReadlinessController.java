@@ -1,20 +1,21 @@
 package com.gap.readliness.controllers;
 
-import com.gap.readliness.dto.GetOrderListRs;
-import com.gap.readliness.dto.ListRq;
-import com.gap.readliness.dto.GetCustomerListRs;
-import com.gap.readliness.dto.GetItemListRs;
+import com.gap.readliness.dto.*;
 import com.gap.readliness.model.Customer;
 import com.gap.readliness.model.Item;
 import com.gap.readliness.model.Order;
 import com.gap.readliness.services.ReadlinessService;
+import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,9 +24,9 @@ public class ReadlinessController {
     @Autowired
     ReadlinessService readlinessService;
 
-    @PostMapping(value = "/savecustomer", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void saveCustomer(@RequestBody Customer customerReq) {
-        readlinessService.saveCustomer(customerReq);
+    @PostMapping(value = "/savecustomer", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void saveCustomer(@RequestPart Customer customerReq, @RequestPart("file") MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        readlinessService.saveCustomer(customerReq, file);
     }
 
     @PostMapping(value = "/getcustomerlist")
@@ -33,9 +34,19 @@ public class ReadlinessController {
         return readlinessService.getCustomerList(customerlistRq);
     }
 
-    @PostMapping(value = "/updatecustomer")
-    public void updateCustomer(@RequestBody Customer customerReq) {
-        readlinessService.updateCustomer(customerReq);
+    @PostMapping(value = "/getcustomer")
+    public List<GetCustomer> getCustomer() {
+        return readlinessService.getCustomer();
+    }
+
+    @PostMapping(value = "/getitem")
+    public List<GetItem> getItem() {
+        return readlinessService.getItem();
+    }
+
+    @PostMapping(value = "/updatecustomer", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void updateCustomer(@RequestPart Customer customerReq, @RequestPart("file") MultipartFile file) {
+        readlinessService.updateCustomer(customerReq, file);
     }
 
     @PostMapping(value = "/getdetailcustomer")
@@ -89,7 +100,7 @@ public class ReadlinessController {
     }
 
     @PostMapping(value = "/getdetailorder")
-    public Order getDetailOrder(@RequestParam Long id) {
+    public OrderDetail getDetailOrder(@RequestParam Long id) {
         return readlinessService.getDetailOrder(id);
     }
 
@@ -97,9 +108,4 @@ public class ReadlinessController {
     public void deleteOrder(@RequestParam Long id) {
         readlinessService.deleteOrder(id);
     }
-
-//    @PostMapping(value = "/downloadavailableorderdatalist")
-//    public void deleteItem(@RequestParam Long id) {
-//        readlinessService.deleteItem(id);
-//    }
 }
