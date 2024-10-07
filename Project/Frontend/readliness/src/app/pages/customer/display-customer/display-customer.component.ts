@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 interface Customer {
   customerId: number;
@@ -25,15 +26,16 @@ interface CustomerResponse {
 @Component({
   selector: 'app-display-customer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './display-customer.component.html',
   styleUrls: ['./display-customer.component.scss'],
 })
 export class DisplayCustomerComponent implements OnInit {
   customerResponse: CustomerResponse | null = null;
+  pageSize: number = 5;
+  page: number = 1;
   private readonly apiUrlList =
     'http://localhost:8081/api/readliness/getcustomerlist';
-
   private readonly apiUrlDelete =
     'http://localhost:8081/api/readliness/deletecustomer';
 
@@ -43,34 +45,16 @@ export class DisplayCustomerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchCustomers(1);
+    this.fetchCustomers(this.page, this.pageSize);
   }
 
-  deleteCustomers(id: number): void {
-    if (confirm('Are you sure you want to delete this customer?')) {
-      this.http
-        .post<CustomerResponse>(this.apiUrlDelete + `?id=${id}`, {})
-        .subscribe({
-          next: (response) => {
-            console.log('Customer deleted successfully', response);
-            this.fetchCustomers(1);
-          },
-          error: (error) => {
-            console.error('Error deleting customer', error);
-          },
-          complete: () => {
-            console.log('Delete operation completed');
-          },
-        });
-    }
-  }
-
-  fetchCustomers(page: number): void {
+  // Fungsi untuk memanggil API dan menarik data sesuai halaman dan pageSize
+  fetchCustomers(page: number, size: number): void {
     const requestBody = {
       page: page,
       shortBy: 'customer_id',
       direction: 'asc',
-      size: 7,
+      size: size,
     };
 
     this.http.post<CustomerResponse>(this.apiUrlList, requestBody).subscribe({
@@ -83,6 +67,28 @@ export class DisplayCustomerComponent implements OnInit {
     });
   }
 
+  onPageSizeChange(): void {
+    this.fetchCustomers(this.page, this.pageSize);
+  }
+
+  // Fungsi untuk menghapus customer
+  deleteCustomers(id: number): void {
+    if (confirm('Are you sure you want to delete this customer?')) {
+      this.http
+        .post<CustomerResponse>(this.apiUrlDelete + `?id=${id}`, {})
+        .subscribe({
+          next: (response) => {
+            console.log('Customer deleted successfully', response);
+            this.fetchCustomers(this.page, this.pageSize);
+          },
+          error: (error) => {
+            console.error('Error deleting customer', error);
+          },
+        });
+    }
+  }
+
+  // Fungsi untuk membuat array nomor halaman yang ditampilkan dalam pagination
   generatePageArray(totalPages: number, currentPage: number): number[] {
     const pageArray = [];
     let start = 1;
@@ -105,15 +111,26 @@ export class DisplayCustomerComponent implements OnInit {
     return pageArray;
   }
 
+  // Fungsi untuk halaman sebelumnya
   inputPagePrev(page: number): number {
     return page - 1;
   }
 
+  // Fungsi untuk halaman berikutnya
   inputPageNext(page: number): number {
     return page + 1;
   }
 
+  // Navigasi ke halaman tambah customer
   navigateToAddComponent(): void {
     this.router.navigate(['customer/add']);
+  }
+
+  navigateToDetailCurstomer(customerId: number): void {
+    this.router.navigate(['customer/detail/', customerId]);
+  }
+
+  navigateToUpdateCurstomer(customerId: number): void {
+    this.router.navigate(['customer/edit/', customerId]);
   }
 }

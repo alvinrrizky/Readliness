@@ -14,7 +14,7 @@
           <th>Price</th>
           <th>Status</th>
           <th>Last Re Stock</th>
-          <th>Actions</th>
+          <th class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -23,7 +23,9 @@
           <td data-label="Name">{{ item.itemsName }}</td>
           <td data-label="Code">{{ item.itemsCode }}</td>
           <td data-label="Stock">{{ item.stock }}</td>
-          <td data-label="Price">{{ item.price }}</td>
+          <td data-label="Price">
+            {{ "Rp. " + (item?.price | number : "1.2-2") }}
+          </td>
           <td data-label="Status">
             <span
               [ngClass]="{
@@ -31,7 +33,7 @@
                 'text-danger': item.isAvailable !== 1
               }"
             >
-              {{ item.isAvailable === 1 ? "Available" : "Invailable" }}
+              {{ item.isAvailable === 1 ? "Available" : "Not Available" }}
             </span>
           </td>
           <td data-label="Last Re Stock">
@@ -39,7 +41,10 @@
           </td>
           <td data-label="Actions" class="text-center">
             <div class="d-flex flex-wrap justify-content-center gap-2">
-              <button class="btn btn-sm btn-primary">
+              <button
+                (click)="navigateToUpdateItem(item.itemsId)"
+                class="btn btn-sm btn-primary"
+              >
                 <i class="fas fa-edit"></i>
               </button>
               <button
@@ -48,6 +53,15 @@
               >
                 <i class="fas fa-trash"></i>
               </button>
+              <button
+                (click)="navigateToDetailItem(item.itemsId)"
+                (keydown)="
+                  $event.key === 'Enter' && navigateToDetailItem(item.itemsId)
+                "
+                class="btn btn-sm btn-warning"
+              >
+                <i class="fas fa-info"></i>
+              </button>
             </div>
           </td>
         </tr>
@@ -55,38 +69,53 @@
       </tbody>
     </table>
   </div>
-  <div class="d-flex justify-content-center mt-3 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3 mx-lg-5">
+    <div class="form-inline">
+      <select
+        id="pageSize"
+        class="form-control"
+        [(ngModel)]="pageSize"
+        (change)="fetchItems(1, pageSize)"
+      >
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+
     <nav aria-label="Page navigation">
-      <ul class="pagination flex-wrap">
+      <ul class="pagination flex-wrap mb-0">
         <li
           class="page-item"
           [class.disabled]="itemResponse?.pageCurrent === 1"
         >
           <a
             class="page-link"
-            (click)="fetchItems(inputPagePrev(itemResponse?.pageCurrent ?? 1))"
-            aria-label="Previous"
-            [style.cursor]="
-              itemResponse?.pageCurrent === 1 ? 'not-allowed' : 'pointer'
+            (click)="
+              fetchItems(
+                inputPagePrev(itemResponse?.pageCurrent ?? 1),
+                pageSize
+              )
             "
           >
             <span aria-hidden="true">«</span>
           </a>
         </li>
-        @for (page of generatePageArray(itemResponse?.totalPages ?? 0,
-        itemResponse?.pageCurrent ?? 1); track page) {
         <li
+          *ngFor="
+            let page of generatePageArray(
+              itemResponse?.totalPages ?? 0,
+              itemResponse?.pageCurrent ?? 1
+            )
+          "
           class="page-item"
           [class.active]="itemResponse?.pageCurrent === page"
         >
-          <a
-            class="page-link"
-            (click)="fetchItems(page)"
-            [style.cursor]="'pointer'"
-            >{{ page }}</a
-          >
+          <a class="page-link" (click)="fetchItems(page, pageSize)">{{
+            page
+          }}</a>
         </li>
-        }
         <li
           class="page-item"
           [class.disabled]="
@@ -95,12 +124,11 @@
         >
           <a
             class="page-link"
-            (click)="fetchItems(inputPageNext(itemResponse?.pageCurrent ?? 1))"
-            aria-label="Next"
-            [style.cursor]="
-              itemResponse?.pageCurrent === itemResponse?.totalPages
-                ? 'not-allowed'
-                : 'pointer'
+            (click)="
+              fetchItems(
+                inputPageNext(itemResponse?.pageCurrent ?? 1),
+                pageSize
+              )
             "
           >
             <span aria-hidden="true">»</span>

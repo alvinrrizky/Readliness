@@ -1,1 +1,54 @@
-<p>detail-item works!</p>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="main-description px-2 text-center">
+        <h2 class="mb-4">Detail Item</h2>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th scope="row" class="bg-light w-50">Item Name</th>
+              <td>{{ itemResponse?.itemsName }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Item Code</th>
+              <td>{{ itemResponse?.itemsCode }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Price</th>
+              <td>{{ "Rp. " + (itemResponse?.price | number : "1.2-2") }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Stock</th>
+              <td>{{ itemResponse?.stock }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Last Re Stock</th>
+              <td>
+                {{
+                  itemResponse?.lastReStock
+                    ? (itemResponse?.lastReStock | date : "medium")
+                    : "-"
+                }}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Status</th>
+              <td
+                [ngClass]="{
+                  'bg-success text-white': itemResponse?.isAvailable === 1,
+                  'bg-danger text-white': itemResponse?.isAvailable !== 1
+                }"
+              >
+                <strong>{{
+                  itemResponse?.isAvailable === 1
+                    ? "Available"
+                    : "Not Available"
+                }}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,62 @@
-<p>add-order works!</p>
+<div class="container">
+  <div class="form-wrap mt-lg-5 mb-4">
+    <form id="survey-form">
+      <div class="col">
+        <div class="col">
+          <div class="form-group">
+            <label id="customer-label" for="customer">Customer Name</label>
+            <select
+              name="customer"
+              [(ngModel)]="addOrderObj.customerId"
+              id="customer"
+              class="form-control"
+              required
+            >
+              <option
+                *ngFor="let customer of customerResponse"
+                [value]="customer.customerId"
+              >
+                {{ customer.customerName }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label id="item-label" for="item">Item Name</label>
+            <select
+              name="item"
+              [(ngModel)]="addOrderObj.itemsId"
+              id="item"
+              class="form-control"
+              required
+            >
+              <option *ngFor="let item of itemResponse" [value]="item.itemsId">
+                {{ item.itemsName }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label id="name-label" for="name">Quantity</label>
+            <input
+              type="number"
+              name="quantity"
+              [(ngModel)]="addOrderObj.quantity"
+              id="quantity"
+              placeholder="Enter your Quantity"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+        <div class="col">
+          <button type="button" (click)="addOrder()" class="btn btn-primary">
+            Add Order
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

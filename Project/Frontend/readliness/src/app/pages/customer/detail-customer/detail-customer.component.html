@@ -1,1 +1,63 @@
-<p>detail-customer works!</p>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="main-description px-2 text-center">
+        <h2 class="mb-4">Detail Customer</h2>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th scope="row" class="bg-light w-50">Customer Name</th>
+              <td>{{ customerResponse?.customerName }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Customer Address</th>
+              <td>{{ customerResponse?.customerAddress }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Customer Code</th>
+              <td>{{ customerResponse?.customerCode }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Customer Phone</th>
+              <td>{{ customerResponse?.customerPhone }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Status</th>
+              <td
+                [ngClass]="{
+                  'bg-success text-white': customerResponse?.isActive === 1,
+                  'bg-danger text-white': customerResponse?.isActive !== 1
+                }"
+              >
+                <strong>{{
+                  customerResponse?.isActive === 1 ? "Active" : "Not Active"
+                }}</strong>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Last Order Date</th>
+              <td>
+                {{
+                  customerResponse?.lastOrderDate
+                    ? (customerResponse?.lastOrderDate | date : "medium")
+                    : "-"
+                }}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Picture</th>
+              <td>
+                <img
+                  [src]="customerResponse?.pic"
+                  [alt]="customerResponse?.customerName"
+                  class="img-fluid img-thumbnail"
+                  style="max-width: 180px"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

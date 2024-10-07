@@ -1,1 +1,39 @@
-<p>detail-order works!</p>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="main-description px-2 text-center">
+        <h2 class="mb-4">Detail Order</h2>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th scope="row" class="bg-light w-50">Order Code</th>
+              <td>{{ orderResponse?.orderCode }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Order Date</th>
+              <td>{{ orderResponse?.orderDate }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Total Price</th>
+              <td>
+                {{ "Rp. " + (orderResponse?.totalPrice | number : "1.2-2") }}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Quantity</th>
+              <td>{{ orderResponse?.quantity }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Customer Name</th>
+              <td>{{ orderResponse?.customerName }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="bg-light">Item Name</th>
+              <td>{{ orderResponse?.itemsName }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

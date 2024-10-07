@@ -1,22 +1,11 @@
-<nav class="navbar navbar-expand-lg bg-light px-4">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
   <div class="container-fluid">
-    <a class="navbar-brand">Online Shop</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
+    <a class="navbar-brand text-white"><strong>Online Shop</strong></a>
+    <div class="navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto flex-row gap-3">
         <li class="nav-item">
           <a
-            class="nav-link"
+            class="nav-link text-white"
             [routerLink]="['/order/display']"
             routerLinkActive="active"
             >Order</a
@@ -24,7 +13,7 @@
         </li>
         <li class="nav-item">
           <a
-            class="nav-link"
+            class="nav-link text-white"
             [routerLink]="['/customer/display']"
             routerLinkActive="active"
             >Customer</a
@@ -32,7 +21,7 @@
         </li>
         <li class="nav-item">
           <a
-            class="nav-link"
+            class="nav-link text-white"
             [routerLink]="['/item/display']"
             routerLinkActive="active"
             >Item</a
@@ -43,5 +32,5 @@
   </div>
 </nav>
 <div class="container-fluid">
-  <router-outlet />
+  <router-outlet></router-outlet>
 </div>

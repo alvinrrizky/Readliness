@@ -7,7 +7,8 @@
             <label id="name-label" for="name">Name</label>
             <input
               type="text"
-              name="name"
+              name="customerName"
+              [(ngModel)]="addCustomerObj.customerName"
               id="name"
               placeholder="Enter your name"
               class="form-control"
@@ -17,12 +18,13 @@
         </div>
         <div class="col">
           <div class="form-group">
-            <label id="email-label" for="email">Address</label>
+            <label id="address-label" for="address">Address</label>
             <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter your email"
+              type="text"
+              name="customerAddress"
+              [(ngModel)]="addCustomerObj.customerAddress"
+              id="address"
+              placeholder="Enter your Address"
               class="form-control"
               required
             />
@@ -33,51 +35,38 @@
             <label id="number-label" for="number">Phone</label>
             <input
               type="tel"
-              name="phone number"
-              id="phoneNumber"
+              name="customerPhone"
+              [(ngModel)]="addCustomerObj.customerPhone"
+              id="customerPhone"
               placeholder="Enter your Phone Number"
               class="form-control"
               required
             />
           </div>
         </div>
-      </div>
-      <div class="col mb-5">
-        <div class="text-start">
+        <div class="col">
           <div class="form-group">
-            <label id="name-label" for="name">Your Picture</label>
+            <label for="photo">Photo</label>
             <input
-              class="form-control"
               type="file"
-              (change)="onChange($event)"
+              name="pic"
+              id="photo"
+              accept="image/*"
+              class="form-control"
+              required
+              (change)="onFileSelected($event)"
             />
           </div>
         </div>
-
-        <div class="container text-center jumbotron">
-          @if (shortLink) {
-          <h2>Visit Here</h2>
-          <a href="{{ shortLink }}">{{ shortLink }}</a>
-          }
-        </div>
-
-        <div class="container">
-          @if (loading) {
-          <h3>Loading ...</h3>
-          }
-        </div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <button
-            (click)="onUpload()"
-            type="button"
-            id="button"
-            class="btn btn-primary btn-block"
-          >
-            Add Customer
-          </button>
-        </div>
+      <div class="col">
+        <button
+          type="button"
+          class="btn btn-primary mt-3"
+          (click)="addCustomer()"
+        >
+          Add Customer
+        </button>
       </div>
     </form>
   </div>

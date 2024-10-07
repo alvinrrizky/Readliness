@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 interface Item {
   itemsId: number;
@@ -24,12 +25,14 @@ interface ItemResponse {
 @Component({
   selector: 'app-display-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './display-item.component.html',
   styleUrl: './display-item.component.scss',
 })
 export class DisplayItemComponent {
   itemResponse: ItemResponse | null = null;
+  pageSize: number = 5;
+  page: number = 1;
   private readonly apiUrlList =
     'http://localhost:8081/api/readliness/getitemlist';
 
@@ -42,7 +45,7 @@ export class DisplayItemComponent {
   ) {}
 
   ngOnInit(): void {
-    this.fetchItems(1);
+    this.fetchItems(this.page, this.pageSize);
   }
 
   deleteItems(id: number): void {
@@ -52,7 +55,7 @@ export class DisplayItemComponent {
         .subscribe({
           next: (response) => {
             console.log('Item deleted successfully', response);
-            this.fetchItems(1);
+            this.fetchItems(this.page, this.pageSize);
           },
           error: (error) => {
             console.error('Error deleting item', error);
@@ -64,12 +67,12 @@ export class DisplayItemComponent {
     }
   }
 
-  fetchItems(page: number): void {
+  fetchItems(page: number, size: number): void {
     const requestBody = {
       page: page,
       shortBy: 'items_id',
       direction: 'asc',
-      size: 7,
+      size: size,
     };
 
     this.http.post<ItemResponse>(this.apiUrlList, requestBody).subscribe({
@@ -114,5 +117,13 @@ export class DisplayItemComponent {
 
   navigateToAddItem(): void {
     this.router.navigate(['item/add']);
+  }
+
+  navigateToDetailItem(itemId: number): void {
+    this.router.navigate(['item/detail/', itemId]);
+  }
+
+  navigateToUpdateItem(itemId: number): void {
+    this.router.navigate(['item/edit/', itemId]);
   }
 }
