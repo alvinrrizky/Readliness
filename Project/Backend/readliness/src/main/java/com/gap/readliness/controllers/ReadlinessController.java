@@ -8,7 +8,11 @@ import com.gap.readliness.services.ReadlinessService;
 import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,7 +54,7 @@ public class ReadlinessController {
     }
 
     @PostMapping(value = "/getdetailcustomer")
-    public Customer getDetailCustomer(@RequestParam Long id) {
+    public getDetailCustomer getDetailCustomer(@RequestParam Long id) {
         return readlinessService.getDetailCustomer(id);
     }
 
@@ -107,5 +111,19 @@ public class ReadlinessController {
     @PostMapping(value = "/deleteorder")
     public void deleteOrder(@RequestParam Long id) {
         readlinessService.deleteOrder(id);
+    }
+
+    @GetMapping(value = "/getFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<InputStreamResource> getFile(@RequestParam String fileName) {
+        try {
+            InputStreamResource resource = readlinessService.getFile(fileName);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

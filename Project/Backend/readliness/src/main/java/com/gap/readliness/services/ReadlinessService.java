@@ -9,26 +9,26 @@ import com.gap.readliness.repository.CustomerRepository;
 import com.gap.readliness.repository.ItemRepository;
 import com.gap.readliness.repository.OrderRepository;
 import com.gap.readliness.util.GenerateUtil;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
+import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -188,6 +188,16 @@ public class ReadlinessService {
         } catch (Exception e) {
             throw new RuntimeException("Error updating customer", e);
         }
+    }
+
+    public InputStreamResource getFile(String fileName) throws Exception {
+        InputStream inputStream = minioClient.getObject(
+                GetObjectArgs.builder()
+                        .bucket("spring-online-shop")
+                        .object(fileName)
+                        .build());
+
+        return new InputStreamResource(inputStream);
     }
 
     @Transactional
@@ -367,7 +377,7 @@ public class ReadlinessService {
         }
     }
 
-    public Customer getDetailCustomer(Long id) {
+    public getDetailCustomer getDetailCustomer(Long id) {
         log.info("Start get detail customer");
         try {
 
@@ -376,7 +386,7 @@ public class ReadlinessService {
             String objectName = dataDetail.getPic();
             String presignedUrl = generatePresignedUrl(objectName);
 
-            Customer customer = new Customer();
+            getDetailCustomer customer = new getDetailCustomer();
             customer.setCustomerId(dataDetail.getCustomerId());
             customer.setCustomerName(dataDetail.getCustomerName());
             customer.setCustomerCode(dataDetail.getCustomerCode());
@@ -385,6 +395,7 @@ public class ReadlinessService {
             customer.setIsActive(dataDetail.getIsActive());
             customer.setLastOrderDate(dataDetail.getLastOrderDate());
             customer.setPic(presignedUrl);
+            customer.setPicName(objectName);
 
             return customer;
         } catch (Exception e) {

@@ -23,6 +23,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<OrderResponsePage> getOrder(Pageable pageable);
 
     Order findByOrderId(@Param("orderId") Long orderId);
+
+    Order findByItemsId(@Param("itemsId") Long itemsId);
     
     Order findByCustomerId(@Param("customerId") Long customerId);
 
