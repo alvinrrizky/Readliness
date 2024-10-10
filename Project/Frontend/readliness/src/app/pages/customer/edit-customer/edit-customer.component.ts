@@ -13,6 +13,7 @@ interface CustomerResponse {
   isActive: number;
   lastOrderDate: Date;
   pic: string;
+  picName: string;
 }
 
 @Component({
@@ -37,6 +38,7 @@ export class EditCustomerComponent {
     customerAddress: string;
     customerPhone: string;
     pic: string;
+    picName: string;
   } = {
     customerId: 0,
     customerName: '',
@@ -46,6 +48,7 @@ export class EditCustomerComponent {
     customerAddress: '',
     customerPhone: '',
     pic: '',
+    picName: '',
   };
 
   updateCustomerFile: {
@@ -83,7 +86,9 @@ export class EditCustomerComponent {
             customerAddress: data.customerAddress,
             customerPhone: data.customerPhone,
             pic: data.pic,
+            picName: data.picName,
           };
+          this.getFileFromServer(data.picName);
         },
         error: (error) => {
           console.error('Error fetching item', error);
@@ -122,10 +127,30 @@ export class EditCustomerComponent {
     });
   }
 
+  getFileFromServer(fileName: string) {
+    this.http
+      .get(
+        `http://localhost:8081/api/readliness/getFile?fileName=${fileName}`,
+        {
+          responseType: 'blob',
+        }
+      )
+      .subscribe((blob) => {
+        const file = new File([blob], fileName, { type: blob.type });
+        this.handleFile(file);
+      });
+  }
+
+  handleFile(file: File) {
+    this.updateCustomerFile.file = file;
+    console.log('File received from server:', file);
+  }
+
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
       this.updateCustomerFile.file = file;
+      console.log('File selected:', file);
     }
   }
 }
